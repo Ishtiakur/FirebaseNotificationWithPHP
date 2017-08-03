@@ -1,0 +1,29 @@
+package com.example.ishtiakrahman.firebasenotificationwithphp.NotificationPackage;
+
+import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
+
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.FirebaseInstanceIdService;
+
+/**
+ * Created by Ishtiak Rahman on 03-Aug-17.
+ */
+
+public class MyFirebaseInstanceIDService  extends FirebaseInstanceIdService {
+
+    private static final String TAG = MyFirebaseInstanceIDService.class.getSimpleName();
+    @Override
+    public void onTokenRefresh() {
+        super.onTokenRefresh();
+        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+
+        System.out.println("New Reg ID/Token: "+refreshedToken);
+
+        // Notify UI that registration has completed, so the progress indicator can be hidden.
+        Intent registrationComplete = new Intent(Configuration.REGISTRATION_COMPLETE);
+        registrationComplete.putExtra("token", refreshedToken);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
+    }
+
+}
